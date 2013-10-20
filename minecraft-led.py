@@ -1,8 +1,8 @@
 #This is the main file
 
 #Start all the initialisation stuff
-import minecraft.minecraft as minecraft
-import minecraft.block as block
+import minecraft as minecraft
+import block as block
 import time
 
 #Suggested code from GPIO google code site as easy to forget to run as root
@@ -36,29 +36,34 @@ if __name__ == "__main__":
     mc.postToChat("LED position markers ready to start")
     time.sleep(5)
 
-    #Determine the players position
-    playerPos = mc.player.getPos()
+    while True:
+        #Determine the players position
+        playerPos = mc.player.getPos()
+        #mc.postToChat(playerPos)
+        playerPosInt = minecraft.Vec3(int(playerPos.x), int(playerPos.y), int(playerPos.z))
+        #Take that position data and subtract 1 from y value to get the position of the block below
+        blockType = mc.getBlock(playerPosInt.x, playerPosInt.y - 1, playerPosInt.z)
 
+        time.sleep(0.25)
+        #mc.postToChat("Blocktype is")
+        #mc.postToChat(blockType)
 
-    #Take that position data and subtract 1 from y value to get the position of the block below
-    blockType = world.getBlock(playerPos.x, playerPos.y - 1, playerPos.z)
-
-    if blockType == 0:
-        GPIO.output(RED, True)
-        GPIO.output(YELLOW, False)
-        GPIO.output(GREEN, False)
-    elif blockType == 8:
-        GPIO.output(RED, False)
-        GPIO.output(YELLOW, True)
-        GPIO.output(GREEN, False)
-    elif blockType == 9:
-        GPIO.output(RED, False)
-        GPIO.output(YELLOW, True)
-        GPIO.output(GREEN, False)
-    else:
-        GPIO.output(RED, True)
-        GPIO.output(YELLOW, False)
-        GPIO.output(GREEN, False)
+        if blockType == 0:
+             GPIO.output(RED, True)
+             GPIO.output(YELLOW, False)
+             GPIO.output(GREEN, False)
+        elif blockType == 8:
+             GPIO.output(RED, False)
+             GPIO.output(YELLOW, True)
+             GPIO.output(GREEN, False)
+        elif blockType == 9:
+             GPIO.output(RED, False)
+             GPIO.output(YELLOW, True)
+             GPIO.output(GREEN, False)
+        else:
+             GPIO.output(RED, False)
+             GPIO.output(YELLOW, False)
+             GPIO.output(GREEN, True)
 
 
 #If block is
